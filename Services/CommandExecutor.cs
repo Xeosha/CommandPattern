@@ -19,27 +19,14 @@ namespace CommandPattern.Services
 
         public void ExecuteCommand(ICommand command)
         {
+            var loggedCommand = new CommandLoggerDecorator(command, _textProcessor);
+
             if (command is not UndoCommand && command is not RedoCommand)
             {
-                _history.AddCommand(command);
+                _history.AddCommand(loggedCommand);
             }
 
-            Console.WriteLine(command.GetType().Name);
-            Console.WriteLine($"ДО: {_textProcessor}");
-
-            command.Execute();
-
-            Console.WriteLine($"ПОСЛЕ: {_textProcessor}");
-        }
-
-        public void Undo()
-        {
-            _history.Undo();
-        }
-
-        public void Redo()
-        {
-            _history.Redo();
+            loggedCommand.Execute();
         }
     }
 }

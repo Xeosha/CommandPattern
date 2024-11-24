@@ -61,7 +61,7 @@ namespace CommandPatter.Services
 
                 commands.Add(command);
 
-                // Оборачиваем команду в декоратор для логирования
+                //Оборачиваем команду в декоратор для логирования
                 //if (command != null)
                 //{
                 //    command = new CommandLoggerDecorator(command, _processor);

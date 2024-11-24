@@ -14,28 +14,33 @@ namespace CommandPatter.Commands
             _processor = processor;
         }
 
-        public ICommand GetCommand { get { return _command; } } 
-
         public void Execute()
         {
-            Console.WriteLine("\t-----Execute-----");
-            Console.WriteLine($"-----\tВыполяется: {_command.GetType().Name}\t-----");
-            Console.WriteLine($"Текст до: {_processor.GetText()}");
-            _command.Execute();
-            Console.WriteLine($"Текст после: {_processor.GetText()}");
-            Console.WriteLine($"-----\tВыполнено: {_command.GetType().Name}\t-----");
-            Console.WriteLine("\t-----EndExecute-----\n");
+            LogAction("Execute", _command.Execute);
         }
 
         public void Undo()
         {
-            Console.WriteLine("\t-----Undo-----");
-            Console.WriteLine($"-----\tВыполяется: {_command.GetType().Name}\t-----");
-            Console.WriteLine($"Текст до: {_processor.GetText()}");
-            _command.Undo();
-            Console.WriteLine($"Текст после:: {_processor.GetText()}");
-            Console.WriteLine($"-----\tВыполнено: {_command.GetType().Name}\t-----");
-            Console.WriteLine("\t-----EndUndo-----\n");
+            LogAction("Undo", _command.Undo);
+        }
+
+        private void LogAction(string actionName, Action commandAction)
+        {
+            var commandName = _command.GetType().Name;
+            Console.WriteLine($"\n===== {actionName.ToUpper()} START: {commandName} =====");
+            Console.WriteLine($"[BEFORE] Text: {_processor.GetText()}");
+
+            try
+            {
+                commandAction();
+                Console.WriteLine($"[AFTER] Text: {_processor.GetText()}");
+                Console.WriteLine($"===== {actionName.ToUpper()} END: {commandName} =====\n");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed during {actionName}: {ex.Message}");
+                Console.WriteLine($"===== {actionName.ToUpper()} FAILED: {commandName} =====\n");
+            }
         }
     }
 }
