@@ -4,8 +4,8 @@ using CommandPatter.Services;
 using CommandPattern.Services;
 
 
-var initialText = File.ReadAllText("text.txt");
-var processor = new TextProcessor(initialText);
+var processor = new TextProcessor();
+processor.ParseText("text.txt");  
 
 var history = new CommandHistory();
 
