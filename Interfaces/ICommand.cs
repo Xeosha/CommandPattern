@@ -5,5 +5,6 @@ namespace CommandPattern.Interfaces
     {
         void Execute();
         void Undo();
+        void Redo();
     }
 }

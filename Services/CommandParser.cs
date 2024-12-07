@@ -8,14 +8,10 @@ namespace CommandPatter.Services
     public class CommandParser
     {
         private readonly TextProcessor _processor;
-        private readonly CommandExecutor _executor;
-        private readonly CommandHistory _history;
 
-        public CommandParser(TextProcessor processor, CommandExecutor executor, CommandHistory history)
+        public CommandParser(TextProcessor processor)
         {
             _processor = processor;
-            _executor = executor;
-            _history = history;
         }
 
         public List<ICommand> ParseCommands(string filePath)
@@ -26,7 +22,7 @@ namespace CommandPatter.Services
             foreach (var line in lines)
             {
                 var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                ICommand command = null;
+                ICommand command;
 
                 switch (parts[0])
                 {
@@ -48,11 +44,11 @@ namespace CommandPatter.Services
                         break;
 
                     case "undo":
-                        command = new UndoCommand(_history);
+                        command = new UndoCommand();
                         break;
 
                     case "redo":
-                        command = new RedoCommand(_history);
+                        command = new RedoCommand();
                         break;
 
                     default:
@@ -60,13 +56,6 @@ namespace CommandPatter.Services
                 }
 
                 commands.Add(command);
-
-                //Оборачиваем команду в декоратор для логирования
-                //if (command != null)
-                //{
-                //    command = new CommandLoggerDecorator(command, _processor);
-                //    commands.Add(command);
-                //}
             }
 
             return commands;

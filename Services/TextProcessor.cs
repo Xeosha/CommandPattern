@@ -2,13 +2,13 @@
 {
     public class TextProcessor
     {
-        private string _text;
-        private string _clipboard;
+        private string _text = string.Empty;
+        private string _clipboard = string.Empty;
 
-        public TextProcessor(string initialText)
+
+        public void ParseText(string filePath)
         {
-            _text = initialText;
-            _clipboard = string.Empty;
+            _text = File.ReadAllText(filePath);
         }
 
         public string GetText() => _text;

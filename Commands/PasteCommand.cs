@@ -24,5 +24,6 @@ namespace CommandPattern.Commands
         }
 
         public void Undo() => _processor.SetText(_previousText);
+        public void Redo() => Execute();
     }
 }

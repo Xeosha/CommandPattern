@@ -19,5 +19,6 @@ namespace CommandPattern.Commands
         public void Execute() => _processor.Copy(_startIdx, _endIdx);
 
         public void Undo() { /* Нет действия для undo */ }
+        public void Redo() {/* Нет действия для undo */ }
     }
 }

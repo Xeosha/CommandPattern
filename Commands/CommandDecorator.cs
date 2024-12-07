@@ -24,6 +24,11 @@ namespace CommandPatter.Commands
             LogAction("Undo", _command.Undo);
         }
 
+        public void Redo()
+        {
+            LogAction("Redo", _command.Redo);
+        }
+
         private void LogAction(string actionName, Action commandAction)
         {
             var commandName = _command.GetType().Name;

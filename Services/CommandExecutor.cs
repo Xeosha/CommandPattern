@@ -8,25 +8,39 @@ namespace CommandPattern.Services
 {
     public class CommandExecutor
     {
+        private ICommand? _command;
         private readonly CommandHistory _history;
-        private readonly TextProcessor _textProcessor;
 
-        public CommandExecutor(CommandHistory history, TextProcessor textProcessor)
+        public CommandExecutor(CommandHistory history)
         {
             _history = history;
-            _textProcessor = textProcessor;
         }
 
-        public void ExecuteCommand(ICommand command)
+        public void SetCommand(ICommand command)
         {
-            var loggedCommand = new CommandLoggerDecorator(command, _textProcessor);
+            _command = command;
+        }
 
-            if (command is not UndoCommand && command is not RedoCommand)
-            {
-                _history.AddCommand(loggedCommand);
-            }
+        public void ExecuteCommand()
+        {
+            if (_command == null)
+                return;
 
-            loggedCommand.Execute();
+            _history.AddCommand(_command);
+
+            _command.Execute();
+        }
+
+        public void UndoCommand()
+        {
+            var command = _history.Undo();  // Получаем команду из истории для отмены
+            command?.Undo();
+        }
+            
+        public void RedoCommand()
+        {
+            var command = _history.Redo();  // Получаем команду из истории для повтора
+            command?.Redo();
         }
     }
 }

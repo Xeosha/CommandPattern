@@ -13,24 +13,27 @@ namespace CommandPatter.Services
             _currentIndex++;
         }
 
-        public void Undo()
+        public ICommand? Undo()
         {
             if (_currentIndex >= 0)
             {
                 var command = _commands[_currentIndex];
-                command.Undo();
                 _currentIndex--;
+                return command;
             }
+            return null;
         }
 
-        public void Redo()
+        public ICommand? Redo()
         {
             if (_currentIndex < _commands.Count - 1)
             {
                 _currentIndex++;
                 var command = _commands[_currentIndex];
-                command.Execute();
+                return command;
             }
+
+            return null;
         }
     }
 }

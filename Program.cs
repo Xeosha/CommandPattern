@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿
 using CommandPatter.Commands;
 using CommandPatter.Services;
 using CommandPattern.Services;
@@ -9,14 +9,29 @@ processor.ParseText("text.txt");
 
 var history = new CommandHistory();
 
-var executor = new CommandExecutor(history, processor);
+var executor = new CommandExecutor(history);
 
-var parser = new CommandParser(processor, executor, history);
+var parser = new CommandParser(processor);
+
 var commands = parser.ParseCommands("commands.txt");
 
 foreach (var command in commands)
 {
-    executor.ExecuteCommand(command);
+    var loggedCommand = new CommandLoggerDecorator(command, processor);
+
+    executor.SetCommand(loggedCommand);
+
+    if (command is UndoCommand)
+    {
+        executor.UndoCommand();
+    }
+    else if (command is RedoCommand)
+    {
+        executor.RedoCommand();
+    } else
+    {
+        executor.ExecuteCommand();  
+    }
 }
 
 // Вывод результата
